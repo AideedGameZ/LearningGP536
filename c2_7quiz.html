@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Match Answer Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .move-to { transition: all 0.5s ease; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-xl">
+    <h1 class="text-2xl font-bold mb-6 text-center">Match the Answer Game</h1>
+    <div id="game" class="space-y-6"></div>
+    <div class="mt-6 text-center">
+        <button id="checkBtn" onclick="window.location.reload()" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold">
+            Reset
+        </button>
+        <button id="checkBtn" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold">
+            Check Answers
+        </button>
+    </div>
+</div>
+
+<script>
+const gameItems = [
+    { question: "Highlights specific props or character such as street light", answer: "Spotlight" },
+    { question: "'World' lights, illuminating all angles from a single source point such as illumination.", answer: "" },
+    { question: "Soft fill lights that enhance scene details such as sun", answer: "Directional Lights" }
+];
+
+let currentQuestionIndex = 0;
+
+function shuffle(array) {
+    for (let i = array.length -1; i>0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function renderGame() {
+    currentQuestionIndex = 0;
+    const gameDiv = document.getElementById("game");
+    gameDiv.innerHTML = "";
+
+    // Questions with placeholders
+    const questionsDiv = document.createElement("div");
+    questionsDiv.className = "space-y-6";
+
+    gameItems.forEach((item, index) => {
+        const qDiv = document.createElement("div");
+        qDiv.className = "p-4 bg-blue-50 rounded-lg flex justify-between items-center";
+        qDiv.innerHTML = `<div><span class="font-semibold">${index+1}. </span>${item.question}</div>`;
+        const placeholder = document.createElement("div");
+        placeholder.className = "ml-2 min-w-[100px] min-h-[40px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center";
+        placeholder.setAttribute("data-answer", item.answer);
+        placeholder.setAttribute("data-index", index);
+        qDiv.appendChild(placeholder);
+        questionsDiv.appendChild(qDiv);
+    });
+
+    // Answer buttons
+    const answersDiv = document.createElement("div");
+    answersDiv.className = "mt-8 grid grid-cols-2 gap-4";
+
+    shuffle(gameItems.map(item => item.answer)).forEach(answer => {
+        const btn = document.createElement("button");
+        btn.className = "p-4 bg-gray-200 rounded-lg hover:bg-gray-300 transition move-to";
+        btn.textContent = answer;
+        btn.onclick = () => placeAnswer(btn, answer);
+        answersDiv.appendChild(btn);
+    });
+
+    gameDiv.appendChild(questionsDiv);
+    gameDiv.appendChild(answersDiv);
+}
+
+function placeAnswer(button, selectedAnswer) {
+    const placeholders = document.querySelectorAll('[data-answer]');
+    if (currentQuestionIndex >= placeholders.length) return;
+
+    const placeholder = placeholders[currentQuestionIndex];
+    currentQuestionIndex++;
+
+    // Animate move
+    const rect1 = button.getBoundingClientRect();
+    const rect2 = placeholder.getBoundingClientRect();
+    const dx = rect2.left - rect1.left;
+    const dy = rect2.top - rect1.top;
+
+    button.style.transition = 'transform 0.5s ease';
+    button.style.transform = `translate(${dx}px, ${dy}px)`;
+
+    setTimeout(() => {
+        button.style.transform = 'none';
+        button.style.transition = 'none';
+        button.classList.remove("hover:bg-gray-300");
+        placeholder.innerHTML = "";
+        placeholder.appendChild(button);
+    }, 500);
+}
+
+function checkAnswers() {
+    const placeholders = document.querySelectorAll('[data-answer]');
+    placeholders.forEach(placeholder => {
+        const correctAnswer = placeholder.getAttribute('data-answer');
+        const placedButton = placeholder.querySelector('button');
+        if (!placedButton) return;
+        if (placedButton.textContent === correctAnswer) {
+            placedButton.classList.remove("bg-gray-200");
+            placedButton.classList.add("bg-green-400", "text-white");
+        } else {
+            placedButton.classList.remove("bg-gray-200");
+            placedButton.classList.add("bg-red-400", "text-white");
+        }
+    });
+}
+
+document.getElementById("checkBtn").addEventListener("click", checkAnswers);
+
+renderGame();
+</script>
+</body>
+</html>

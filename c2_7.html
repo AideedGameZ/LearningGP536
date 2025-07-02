@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dating Sim Scenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .fade { transition: opacity 1s ease; }
+    </style>
+</head>
+<body class="w-full h-screen overflow-hidden bg-white relative">
+    <!-- Background Scene -->
+    <div id="background" style="position: fixed; width:100%; height:100%; top:0px; left:0px;" class="fade">
+        <img id="background-img" src="" style="width:100%; height:100%" />
+    </div>
+
+    <!-- Character -->
+    <div id="character" class="absolute inset-0 flex items-center justify-center fade opacity-100 pointer-events-none">
+        <img id="character-img" src="" class="max-h-[80%]"/>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="absolute bottom-0 w-full p-8 fade opacity-100" id="dialog-container">
+        <div class="bg-blue-500/80 border-4 border-blue-300 rounded-xl p-4 max-w-3xl mx-auto">
+            <div class="text-white font-semibold mb-2 text-lg">
+                <span class="bg-blue-300 text-blue-800 px-3 py-1 rounded-full" id="character-name"></span>
+            </div>
+            <p class="text-white text-base" id="dialog-text"></p>
+        </div>
+    </div>
+
+    <!-- Click to continue -->
+    <div class="absolute inset-0 cursor-pointer z-10" onclick="nextScene()"></div>
+
+    <script>
+        const scenes = [
+            {
+                character: "",
+                background: "image/1.png",
+                name: "Teacher",
+                dialog: "Today, we're going to learn about special effects & lighting."
+            },
+            {
+                character: "",
+                background: "image/2.png",
+                name: "Teacher",
+                dialog: "Lets start with ambient light."
+            },
+            {
+                character: "",
+                background: "image/2.png",
+                name: "Teacher",
+                dialog: "Ambient light is uniform that affects all objects equally."
+            },
+            {
+                character: "",
+                background: "image/2.png",
+                name: "Teacher",
+                dialog: "Just like this park, every object gets equally."
+            },
+            {
+                character: "",
+                background: "image/3.png",
+                name: "Teacher",
+                dialog: "Notice something, lighting in this classroom?"
+            },
+            {
+                character: "",
+                background: "image/3.png",
+                name: "Teacher",
+                dialog: "every object gets equally, but has a direction"
+            },
+            {
+                character: "",
+                background: "image/3.png",
+                name: "Teacher",
+                dialog: "Even some parts has rays."
+            },
+            {
+                character: "",
+                background: "image/3.png",
+                name: "Teacher",
+                dialog: "This is what we call directional lighting, usually can be apply on sun."
+            },
+            {
+                character: "",
+                background: "image/3.png",
+                name: "Teacher",
+                dialog: "Directional Light is a light that shines from a direction, but with no specific origin point."
+            },
+            {
+                character: "",
+                background: "image/4.png",
+                name: "Teacher",
+                dialog: "If you take a look closely, street light is different. Not every object gets equally light."
+            },
+            {
+                character: "",
+                background: "image/4.png",
+                name: "Teacher",
+                dialog: "And only a few area applied with light."
+            },
+            {
+                character: "",
+                background: "image/4.png",
+                name: "Teacher",
+                dialog: "We call this SPOTLIGHT."
+            },
+            {
+                character: "",
+                background: "image/4.png",
+                name: "Teacher",
+                dialog: "Spotlight is a focused light that shines in a cone shape from a specific position."
+            },
+            {
+                character: "",
+                background: "image/5.png",
+                name: "Teacher",
+                dialog: "Finally, we have learn alot of things about lighting, this is the summary of lighting."
+            }
+        ];
+
+        let currentScene = -1;
+
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene >= scenes.length) currentScene = 0;
+                const scene = scenes[currentScene];
+                document.getElementById("background-img").src = scene.background;
+                document.getElementById("character-img").src = scene.character;
+                document.getElementById("character-name").innerText = scene.name;
+                document.getElementById("dialog-text").innerText = scene.dialog;
+                fadeIn();
+            });
+        }
+
+        function fadeOut(callback) {
+            document.getElementById("background").style.opacity = 0;
+            document.getElementById("character").style.opacity = 0;
+            document.getElementById("dialog-container").style.opacity = 0;
+            setTimeout(callback, 1000);
+        }
+
+        function fadeIn() {
+            document.getElementById("background").style.opacity = 1;
+            document.getElementById("character").style.opacity = 1;
+            document.getElementById("dialog-container").style.opacity = 1;
+        }
+
+        // Start first scene
+        nextScene();
+    </script>
+</body>
+</html>

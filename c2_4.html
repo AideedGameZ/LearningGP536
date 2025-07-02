@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dating Sim Scenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .fade { transition: opacity 1s ease; }
+    </style>
+</head>
+<body class="w-full h-screen overflow-hidden bg-white relative">
+    <!-- Background Scene -->
+    <div id="background" style="position: fixed; width:100%; height:100%; top:0px; left:0px;" class="fade">
+        <img id="background-img" src="" style="width:100%; height:100%" />
+    </div>
+
+    <!-- Character -->
+    <div id="character" class="absolute inset-0 flex items-center justify-center fade opacity-100 pointer-events-none">
+        <img id="character-img" src="" class="max-h-[80%]"/>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="absolute bottom-0 w-full p-8 fade opacity-100" id="dialog-container">
+        <div class="bg-blue-500/80 border-4 border-blue-300 rounded-xl p-4 max-w-3xl mx-auto">
+            <div class="text-white font-semibold mb-2 text-lg">
+                <span class="bg-blue-300 text-blue-800 px-3 py-1 rounded-full" id="character-name"></span>
+            </div>
+            <p class="text-white text-base" id="dialog-text"></p>
+        </div>
+    </div>
+
+    <!-- Click to continue -->
+    <div class="absolute inset-0 cursor-pointer z-10" onclick="nextScene()"></div>
+
+    <script>
+        const scenes = [
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Now, let’s explore VISUAL DESIGN, an essential part of making games visually appealing and immersive."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "First, there’s Concept Art, or CA. It’s a visual representation of game ideas that sets the overall tone, much like in film and video games."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Next, we use Reference for Creators. This gives illustrators and animators a consistent visual point of reference, ensuring unity throughout the project."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "When Creating Characters, the goal is to design engaging, visually striking characters that appeal to our target audience. This takes careful visual studies."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Creature Design draws inspiration from real animals. By combining basic shapes and studying body language, we create unique creatures."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Environment Design involves building detailed environments — like bustling city streets — that characters can interact with."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Props & Asset Design covers objects that support the scene, such as furniture or tools, even though they’re not part of the main level or character set."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Storyboards are also key. They’re graphic organizers with sequential illustrations that pre-visualize motion, animation, or gameplay."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "The Importance of Storyboards is huge. They help us visualize the game, spot gaps, and get a quick perspective before production starts."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Storyboards can identify gaps in gameplay or quests, are especially useful for complex games, and give a clear visual overview for developers."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Most importantly, they provide a quick preview of how the game will look and feel, helping us make smart choices early."
+    }
+        ];
+
+        let currentScene = -1;
+
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene >= scenes.length) currentScene = 0;
+                const scene = scenes[currentScene];
+                document.getElementById("background-img").src = scene.background;
+                document.getElementById("character-img").src = scene.character;
+                document.getElementById("character-name").innerText = scene.name;
+                document.getElementById("dialog-text").innerText = scene.dialog;
+                fadeIn();
+            });
+        }
+
+        function fadeOut(callback) {
+            document.getElementById("background").style.opacity = 0;
+            document.getElementById("character").style.opacity = 0;
+            document.getElementById("dialog-container").style.opacity = 0;
+            setTimeout(callback, 1000);
+        }
+
+        function fadeIn() {
+            document.getElementById("background").style.opacity = 1;
+            document.getElementById("character").style.opacity = 1;
+            document.getElementById("dialog-container").style.opacity = 1;
+        }
+
+        // Start first scene
+        nextScene();
+    </script>
+</body>
+</html>

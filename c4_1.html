@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dating Sim Scenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .fade { transition: opacity 1s ease; }
+    </style>
+</head>
+<body class="w-full h-screen overflow-hidden bg-white relative">
+    <!-- Background Scene -->
+    <div id="background" style="position: fixed; width:100%; height:100%; top:0px; left:0px;" class="fade">
+        <img id="background-img" src="" style="width:100%; height:100%" />
+    </div>
+
+    <!-- Character -->
+    <div id="character" class="absolute inset-0 flex items-center justify-center fade opacity-100 pointer-events-none">
+        <img id="character-img" src="" class="max-h-[80%]"/>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="absolute bottom-0 w-full p-8 fade opacity-100" id="dialog-container">
+        <div class="bg-blue-500/80 border-4 border-blue-300 rounded-xl p-4 max-w-3xl mx-auto">
+            <div class="text-white font-semibold mb-2 text-lg">
+                <span class="bg-blue-300 text-blue-800 px-3 py-1 rounded-full" id="character-name"></span>
+            </div>
+            <p class="text-white text-base" id="dialog-text"></p>
+        </div>
+    </div>
+
+    <!-- Click to continue -->
+    <div class="absolute inset-0 cursor-pointer z-10" onclick="nextScene()"></div>
+
+    <script>
+        const scenes = [
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Let’s begin with an introduction to Game Engines, the backbone of video game development."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "A Game Engine is a software development environment that provides tools for physics, graphics, AI, and more—allowing developers to focus on game design."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "The Purpose of a game engine is to simplify development by offering core features like rendering, physics, sound, and input handling."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Typical Modules in a game engine include input handling, graphics, sound, physics, and dynamics."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Modern Game Engines also include powerful features like:"
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "- Physics: Balances simulation quality with computing power."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "- Input: Solves cross-platform issues so games work smoothly on different devices."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "- Visual Assets: Helps simplify lighting, shading, and texture mapping."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Now let’s look at some Example Game Engines."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Unreal Engine is a multi-platform engine with tools like Quixel and Megascans. It's scalable, customizable, and supports 2D & 3D. Pricing: Free."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Amazon Lumberyard is a VR-focused engine with cloud-powered features and Twitch integration. Pricing: Free."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "CryENGINE offers stunning visuals and VR support, with access to source code. Pricing: Free, memberships from $50/month."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Unity is a widely-used engine for 2D & 3D content. It’s multi-platform and great for teams. Pricing: Free for personal use, paid from $35/month."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "GameMaker: Studio is perfect for point-and-click development without coding. It's easy to use. Pricing: Free, memberships from $39/month."
+    }
+        ];
+
+        let currentScene = -1;
+
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene >= scenes.length) currentScene = 0;
+                const scene = scenes[currentScene];
+                document.getElementById("background-img").src = scene.background;
+                document.getElementById("character-img").src = scene.character;
+                document.getElementById("character-name").innerText = scene.name;
+                document.getElementById("dialog-text").innerText = scene.dialog;
+                fadeIn();
+            });
+        }
+
+        function fadeOut(callback) {
+            document.getElementById("background").style.opacity = 0;
+            document.getElementById("character").style.opacity = 0;
+            document.getElementById("dialog-container").style.opacity = 0;
+            setTimeout(callback, 1000);
+        }
+
+        function fadeIn() {
+            document.getElementById("background").style.opacity = 1;
+            document.getElementById("character").style.opacity = 1;
+            document.getElementById("dialog-container").style.opacity = 1;
+        }
+
+        // Start first scene
+        nextScene();
+    </script>
+</body>
+</html>

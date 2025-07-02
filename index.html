@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DEVPLAY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .arc-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      transform: rotate(-10deg);
+    }
+
+    .arc-text span {
+      display: inline-block;
+      transform: rotate(calc(var(--i) * 10deg));
+      margin: 0 1px;
+    }
+
+    button{
+        transform: translateY(0px) !important;
+        transition: 1s;
+    }
+
+    button:hover{
+        transform: translateY(-10px) !important;
+    }
+  </style>
+</head>
+<body class="bg-green-300 min-h-screen flex items-center justify-center">
+  <div class="text-center space-y-8">
+    <!-- WELCOME TO (curved) -->
+    <div class="arc-text text-black text-xl">
+      <span style="--i:-4">W</span>
+      <span style="--i:-3">E</span>
+      <span style="--i:-2">L</span>
+      <span style="--i:-1">C</span>
+      <span style="--i:0">O</span>
+      <span style="--i:1">M</span>
+      <span style="--i:2">E</span>
+      <span style="--i:3">&nbsp;</span>
+      <span style="--i:4">T</span>
+      <span style="--i:5">O</span>
+    </div>
+
+    <!-- Start Button -->
+    <div>
+      <button onclick="gotoPage('chapter')" class="bg-white text-green-700 border-4 border-green-600 px-6 py-3 hover:bg-green-200 transition uppercase">
+        Start
+      </button>
+    </div>
+
+    <!-- Quit Button -->
+    <div>
+      <button class="bg-white text-red-700 border-4 border-red-600 px-6 py-3 hover:bg-red-200 transition uppercase">
+        Quit
+      </button>
+    </div>
+
+    <!-- DEVPLAY Title -->
+    <div class="text-white text-3xl mt-8 rotate-[15deg]">
+      DEVPLAY
+    </div>
+  </div>
+</body>
+<script src="src/script.js"></script>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dating Sim Scenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .fade { transition: opacity 1s ease; }
+    </style>
+</head>
+<body class="w-full h-screen overflow-hidden bg-white relative">
+    <!-- Background Scene -->
+    <div id="background" style="position: fixed; width:100%; height:100%; top:0px; left:0px;" class="fade">
+        <img id="background-img" src="" style="width:100%; height:100%" />
+    </div>
+
+    <!-- Character -->
+    <div id="character" class="absolute inset-0 flex items-center justify-center fade opacity-100 pointer-events-none">
+        <img id="character-img" src="" class="max-h-[80%]"/>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="absolute bottom-0 w-full p-8 fade opacity-100" id="dialog-container">
+        <div class="bg-blue-500/80 border-4 border-blue-300 rounded-xl p-4 max-w-3xl mx-auto">
+            <div class="text-white font-semibold mb-2 text-lg">
+                <span class="bg-blue-300 text-blue-800 px-3 py-1 rounded-full" id="character-name"></span>
+            </div>
+            <p class="text-white text-base" id="dialog-text"></p>
+        </div>
+    </div>
+
+    <!-- Click to continue -->
+    <div class="absolute inset-0 cursor-pointer z-10" onclick="nextScene()"></div>
+
+    <script>
+        const scenes = [
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Let’s dive into the Importance of Audio, which is often crucial for a game’s success."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Audio helps set the mood, build tension, and provide important cues to players."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "It also stimulates player imagination, pulling them deeper into the game world."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "A big challenge in audio design is maintaining variety while keeping file sizes optimized for performance and easier distribution."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Now, let’s look at the Purposes of Audio in games."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "First, audio reflects user actions. For example, sounds play when gaining points, leveling up, or indicating health changes."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Next, audio depicts the environment, like creating 'Windy,' 'Rainy,' or 'Snowy' settings."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "It also sets the mood, whether the game feels hostile, foreboding, adventurous, calm, or organized."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "And good audio connects emotionally with players, evoking strong feelings and drawing them into the story."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Let’s also break down the main Categories of Audio."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "DX stands for Dialogue — all spoken lines, character conversations, voiceovers, and narration."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "MX refers to Music, or non-diegetic audio that acts as a soundtrack to enhance the player’s experience."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "FOL is Foley, meaning sound effects tied to player actions, like footsteps or rustling clothes."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "BG stands for Backgrounds, which are ambient sounds that give life to locations, like city hums or ocean waves."
+    }
+        ];
+
+        let currentScene = -1;
+
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene >= scenes.length) currentScene = 0;
+                const scene = scenes[currentScene];
+                document.getElementById("background-img").src = scene.background;
+                document.getElementById("character-img").src = scene.character;
+                document.getElementById("character-name").innerText = scene.name;
+                document.getElementById("dialog-text").innerText = scene.dialog;
+                fadeIn();
+            });
+        }
+
+        function fadeOut(callback) {
+            document.getElementById("background").style.opacity = 0;
+            document.getElementById("character").style.opacity = 0;
+            document.getElementById("dialog-container").style.opacity = 0;
+            setTimeout(callback, 1000);
+        }
+
+        function fadeIn() {
+            document.getElementById("background").style.opacity = 1;
+            document.getElementById("character").style.opacity = 1;
+            document.getElementById("dialog-container").style.opacity = 1;
+        }
+
+        // Start first scene
+        nextScene();
+    </script>
+</body>
+</html>

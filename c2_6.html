@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dating Sim Scenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .fade { transition: opacity 1s ease; }
+    </style>
+</head>
+<body class="w-full h-screen overflow-hidden bg-white relative">
+    <!-- Background Scene -->
+    <div id="background" style="position: fixed; width:100%; height:100%; top:0px; left:0px;" class="fade">
+        <img id="background-img" src="" style="width:100%; height:100%" />
+    </div>
+
+    <!-- Character -->
+    <div id="character" class="absolute inset-0 flex items-center justify-center fade opacity-100 pointer-events-none">
+        <img id="character-img" src="" class="max-h-[80%]"/>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="absolute bottom-0 w-full p-8 fade opacity-100" id="dialog-container">
+        <div class="bg-blue-500/80 border-4 border-blue-300 rounded-xl p-4 max-w-3xl mx-auto">
+            <div class="text-white font-semibold mb-2 text-lg">
+                <span class="bg-blue-300 text-blue-800 px-3 py-1 rounded-full" id="character-name"></span>
+            </div>
+            <p class="text-white text-base" id="dialog-text"></p>
+        </div>
+    </div>
+
+    <!-- Click to continue -->
+    <div class="absolute inset-0 cursor-pointer z-10" onclick="nextScene()"></div>
+
+    <script>
+        const scenes = [
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Let’s talk about Environment Design, which defines the stage or world where the game takes place."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "It’s crucial for shaping the look, feel, and mood of a game. A well-designed environment aims to amaze and inspire players."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Game environments should also keep evolving, improving on past designs to meet rising player expectations."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Now let’s explore 2D Environments. In 2D, depth is created by dividing the scene into layers: Foreground, Middle ground, and Background."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Players usually view a 2D environment from a single, fixed point. The illusion of depth comes from these layered designs."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Next, 3D Environments offer a more immersive experience than 2D."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Here, actions in the foreground can directly interact with or influence elements in the middle or background, adding dynamic gameplay."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "These 3D worlds are built using specialized modeling software, then imported into a game engine."
+    },
+    {
+        character: "",
+        background: "image/1.png",
+        name: "Teacher",
+        dialog: "Inside the engine, developers control lighting, physics, and how players interact with the 3D space."
+    }
+        ];
+
+        let currentScene = -1;
+
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene >= scenes.length) currentScene = 0;
+                const scene = scenes[currentScene];
+                document.getElementById("background-img").src = scene.background;
+                document.getElementById("character-img").src = scene.character;
+                document.getElementById("character-name").innerText = scene.name;
+                document.getElementById("dialog-text").innerText = scene.dialog;
+                fadeIn();
+            });
+        }
+
+        function fadeOut(callback) {
+            document.getElementById("background").style.opacity = 0;
+            document.getElementById("character").style.opacity = 0;
+            document.getElementById("dialog-container").style.opacity = 0;
+            setTimeout(callback, 1000);
+        }
+
+        function fadeIn() {
+            document.getElementById("background").style.opacity = 1;
+            document.getElementById("character").style.opacity = 1;
+            document.getElementById("dialog-container").style.opacity = 1;
+        }
+
+        // Start first scene
+        nextScene();
+    </script>
+</body>
+</html>
