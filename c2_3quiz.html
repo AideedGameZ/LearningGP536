@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Level Design Match Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-green-200 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl">
+        <h2 class="text-3xl font-bold mb-6 text-center text-green-700">🎮 Level Design Match Challenge</h2>
+
+        <div id="matchGame" class="space-y-6">
+            <!-- Matching questions inserted by JS -->
+        </div>
+
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="checkMatches()" class="bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">✅ Check Answers</button>
+            <button onclick="resetMatch()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">🔄 Reset</button>
+        </div>
+        <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        const steps = [
+            { step: "Determining Waypoints", description: "Begin with a rough sketch mapping out where events can occur." },
+            { step: "Research", description: "Spend time researching environments and characters before sketching." },
+            { step: "Concept Sketching", description: "Write down ideas and sketch concepts for the game world." },
+            { step: "Adding Gameplay", description: "Integrate gameplay mechanics into the designed environment." },
+            { step: "Implement the Narrative", description: "Design levels to reflect the story's key moments: opening, build-up, conflict, and resolution." }
+        ];
+
+        let shuffledDescriptions = [];
+
+        function shuffleDescriptions() {
+            shuffledDescriptions = steps.map(s => s.description).sort(() => 0.5 - Math.random());
+        }
+
+        function renderMatch() {
+            const matchDiv = document.getElementById('matchGame');
+            matchDiv.innerHTML = "";
+            shuffleDescriptions();
+            steps.forEach((item, idx) => {
+                let optionsHtml = shuffledDescriptions.map(desc => `
+                    <option value="${desc}">${desc}</option>
+                `).join('');
+                matchDiv.innerHTML += `
+                    <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                        <div class="w-full md:w-1/3 font-semibold text-green-800 mb-2 md:mb-0">${item.step}</div>
+                        <select class="w-full md:w-2/3 p-3 rounded-xl border border-green-300 focus:outline-none focus:ring-2 focus:ring-green-400">
+                            <option value="">Select description...</option>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+            });
+        }
+
+        function checkMatches() {
+            let score = 0;
+            const selects = document.querySelectorAll('#matchGame select');
+            selects.forEach((select, idx) => {
+                if(select.value === steps[idx].description) {
+                    score++;
+                    select.classList.remove("border-green-300", "border-red-400");
+                    select.classList.add("border-green-600");
+                } else {
+                    select.classList.remove("border-green-300", "border-green-600");
+                    select.classList.add("border-red-400");
+                }
+            });
+            const resultDiv = document.getElementById('result');
+            if(score === steps.length) {
+                resultDiv.innerHTML = `🎉 Perfect! You matched all ${score}/${steps.length} correctly!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-green-600";
+            } else {
+                resultDiv.innerHTML = `✅ You matched ${score}/${steps.length} correctly. Try again!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-yellow-600";
+            }
+        }
+
+        function resetMatch() {
+            renderMatch();
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('result').className = "mt-6 text-center text-xl font-semibold";
+        }
+
+        // initial render
+        renderMatch();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>

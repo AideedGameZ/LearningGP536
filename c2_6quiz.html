@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-yellow-50 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-3xl">
+        <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Match the Pairs!</h1>
+        <div id="gameArea" class="grid grid-cols-2 gap-6">
+            <div id="questions" class="space-y-4"></div>
+            <div id="answers" class="space-y-4"></div>
+        </div>
+        <div class="text-center mt-6 space-x-4">
+            <button onclick="checkAnswers()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-lg shadow-md">Check</button>
+            <button onclick="renderGame()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full text-lg shadow-md">Reset</button>
+        </div>
+        <div id="result" class="mt-4 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        const questionsData = [
+            { question: "Environment", answer: "Stage/world, sets look & mood" },
+            { question: "2D Environment", answer: "Foreground, Middle ground, Background" },
+            { question: "3D Environment", answer: "Uses 3D modeling software" }
+        ];
+
+        let selectedMatches = {};
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderGame() {
+            const questionsDiv = document.getElementById("questions");
+            const answersDiv = document.getElementById("answers");
+            const resultDiv = document.getElementById("result");
+
+            questionsDiv.innerHTML = "";
+            answersDiv.innerHTML = "";
+            resultDiv.textContent = "";
+            selectedMatches = {};
+
+            questionsData.forEach((item, idx) => {
+                questionsDiv.innerHTML += `
+                    <div class="p-3 border rounded-xl flex flex-col bg-yellow-100" id="q${idx}">
+                        <span class="font-semibold text-lg">${item.question}</span>
+                        <div class="selected-answer mt-2 text-green-600 cursor-pointer" onclick="removeAnswer(${idx})"></div>
+                    </div>
+                `;
+            });
+
+            const shuffledAnswers = shuffle(questionsData.map(q => q.answer));
+            shuffledAnswers.forEach(answer => {
+                answersDiv.innerHTML += `
+                    <div class="p-3 border rounded-xl bg-blue-100 cursor-pointer hover:bg-blue-200 transition"
+                        onclick="selectAnswer('${answer}')"
+                        id="a-${btoa(answer)}">${answer}</div>
+                `;
+            });
+        }
+
+        function selectAnswer(answer) {
+            for (let idx = 0; idx < questionsData.length; idx++) {
+                if (!selectedMatches[idx]) {
+                    selectedMatches[idx] = answer;
+                    const slot = document.querySelector(`#q${idx} .selected-answer`);
+                    slot.textContent = answer;
+                    disableAnswer(answer);
+                    break;
+                }
+            }
+        }
+
+        function disableAnswer(answer) {
+            document.getElementById(`a-${btoa(answer)}`).classList.add('opacity-50', 'pointer-events-none');
+        }
+
+        function enableAnswer(answer) {
+            document.getElementById(`a-${btoa(answer)}`).classList.remove('opacity-50', 'pointer-events-none');
+        }
+
+        function removeAnswer(questionIdx) {
+            if (selectedMatches[questionIdx]) {
+                const answer = selectedMatches[questionIdx];
+                enableAnswer(answer);
+                delete selectedMatches[questionIdx];
+                document.querySelector(`#q${questionIdx} .selected-answer`).textContent = "";
+            }
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            questionsData.forEach((item, idx) => {
+                const slot = document.querySelector(`#q${idx} .selected-answer`);
+                if (selectedMatches[idx] === item.answer) {
+                    slot.classList.remove('text-red-600');
+                    slot.classList.add('text-green-600');
+                    correct++;
+                } else {
+                    slot.classList.remove('text-green-600');
+                    slot.classList.add('text-red-600');
+                }
+            });
+
+            document.getElementById("result").textContent = `You matched ${correct} out of ${questionsData.length} correctly!`;
+        }
+
+        renderGame();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>

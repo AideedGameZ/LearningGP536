@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Match Principles of Game Engine Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-100 to-blue-200 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl">
+        <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">🎮 Match the Principles!</h2>
+        <div class="grid grid-cols-2 gap-6">
+            <!-- Principles -->
+            <div>
+                <h3 class="font-semibold mb-3 text-blue-800">Principles</h3>
+                <div id="principles" class="space-y-4">
+                    <button onclick="selectItem(this, 'principle')" class="selectable bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-xl w-full font-semibold transition">Abstraction</button>
+                    <button onclick="selectItem(this, 'principle')" class="selectable bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-xl w-full font-semibold transition">Modularity</button>
+                    <button onclick="selectItem(this, 'principle')" class="selectable bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-xl w-full font-semibold transition">Simplicity</button>
+                    <button onclick="selectItem(this, 'principle')" class="selectable bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-xl w-full font-semibold transition">Recyclability</button>
+                </div>
+            </div>
+
+            <!-- Descriptions -->
+            <div>
+                <h3 class="font-semibold mb-3 text-blue-800">Descriptions</h3>
+                <div id="descriptions" class="space-y-4"></div>
+            </div>
+        </div>
+        
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="checkAnswers()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-6 py-3 rounded-xl font-bold transition shadow">✅ Check Answers</button>
+            <button onclick="resetGame()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">🔄 Reset</button>
+        </div>
+        <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        let selectedPrinciple = null;
+        let selectedDescription = null;
+        let matches = {};
+        const correct = {
+            "Increases versatility by designing components to be general rather than case-specific.": "Abstraction",
+            "Dividing a system into independent and interchangeable modules.": "Modularity",
+            "Breaking things into the simplest form, avoiding unnecessary elements.": "Simplicity",
+            "Designing components to be reused efficiently across multiple projects.": "Recyclability"
+        };
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function loadDescriptions() {
+            const descriptions = Object.keys(correct);
+            const shuffled = shuffleArray(descriptions);
+            const container = document.getElementById('descriptions');
+            container.innerHTML = "";
+            shuffled.forEach(desc => {
+                const btn = document.createElement('button');
+                btn.onclick = () => selectItem(btn, 'description');
+                btn.className = "selectable bg-green-100 hover:bg-green-200 text-green-800 p-4 rounded-xl w-full font-semibold transition";
+                btn.textContent = desc;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectItem(element, type) {
+            if(type === 'principle') {
+                document.querySelectorAll('#principles .selectable').forEach(btn => btn.classList.remove('ring', 'ring-offset-2', 'ring-blue-500'));
+                element.classList.add('ring', 'ring-offset-2', 'ring-blue-500');
+                selectedPrinciple = element;
+            } else {
+                document.querySelectorAll('#descriptions .selectable').forEach(btn => btn.classList.remove('ring', 'ring-offset-2', 'ring-green-500'));
+                element.classList.add('ring', 'ring-offset-2', 'ring-green-500');
+                selectedDescription = element;
+            }
+
+            if(selectedPrinciple && selectedDescription) {
+                matches[selectedDescription.textContent.trim()] = selectedPrinciple.textContent.trim();
+                selectedPrinciple.classList.remove('ring', 'ring-offset-2', 'ring-blue-500');
+                selectedDescription.classList.remove('ring', 'ring-offset-2', 'ring-green-500');
+                selectedPrinciple = null;
+                selectedDescription = null;
+                updateMatchesDisplay();
+            }
+        }
+
+        function updateMatchesDisplay() {
+            for(const desc in matches) {
+                const descBtn = Array.from(document.querySelectorAll('#descriptions .selectable'))
+                    .find(btn => btn.textContent.includes(desc));
+                if(descBtn) {
+                    descBtn.innerHTML = `${desc}<br><span class="text-sm text-gray-600">Matched: ${matches[desc]}</span>`;
+                }
+            }
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            for(const desc in correct) {
+                if(matches[desc] === correct[desc]) {
+                    score++;
+                }
+            }
+            const resultDiv = document.getElementById('result');
+            if(score === 4) {
+                resultDiv.innerHTML = `🎉 Perfect! All matches correct!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-green-600";
+            } else {
+                resultDiv.innerHTML = `✅ You matched ${score} out of 4 correctly. Keep trying!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-yellow-600";
+            }
+        }
+
+        function resetGame() {
+            selectedPrinciple = null;
+            selectedDescription = null;
+            matches = {};
+            document.getElementById('result').innerHTML = "";
+            document.querySelectorAll('#principles .selectable').forEach(btn => btn.classList.remove('ring', 'ring-offset-2', 'ring-blue-500'));
+            loadDescriptions();
+        }
+
+        loadDescriptions();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>

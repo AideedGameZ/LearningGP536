@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Game Design Interface Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 to-pink-200 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-2xl">
+        <h2 class="text-3xl font-bold mb-6 text-center text-pink-700">🎮 Game Design Interface Quiz</h2>
+        
+        <div id="quiz" class="space-y-8">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="checkAnswers()" class="bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">✅ Check Answers</button>
+            <button onclick="resetQuiz()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">🔄 Reset to Level 1</button>
+        </div>
+        <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which interface is incorporated into the game world, letting players interact directly?",
+                options: ["Diegetic", "Non-diegetic", "Spatial", "Meta"],
+                answer: "Diegetic"
+            },
+            {
+                question: "Which interface is NOT part of the game world, only visible to the player like a HUD?",
+                options: ["Meta", "Spatial", "Non-diegetic", "Diegetic"],
+                answer: "Non-diegetic"
+            },
+            {
+                question: "Which type uses objects in the environment to help players understand what's happening, like glowing objects?",
+                options: ["Diegetic", "Spatial", "Meta", "Non-diegetic"],
+                answer: "Spatial"
+            },
+            {
+                question: "Which interface breaks the game world perspective to convey information, like blood splatters on screen?",
+                options: ["Non-diegetic", "Meta", "Diegetic", "Spatial"],
+                answer: "Meta"
+            }
+        ];
+
+        function renderQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.innerHTML = "";
+            questions.forEach((q, idx) => {
+                const optionsHtml = q.options.map(option => `
+                    <label class="block bg-pink-100 hover:bg-pink-200 text-pink-800 p-3 rounded-xl cursor-pointer transition">
+                        <input type="radio" name="q${idx}" value="${option}" class="mr-2">
+                        ${option}
+                    </label>
+                `).join('');
+                quizDiv.innerHTML += `
+                    <div>
+                        <p class="font-semibold mb-3">${idx+1}. ${q.question}</p>
+                        <div class="space-y-2">${optionsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            questions.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                if(selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            const resultDiv = document.getElementById('result');
+            if(score === questions.length) {
+                resultDiv.innerHTML = `🎉 Perfect! You got all ${score}/${questions.length} correct!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-green-600";
+            } else {
+                resultDiv.innerHTML = `✅ You got ${score}/${questions.length} correct. Try again!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-yellow-600";
+            }
+        }
+
+        function resetQuiz() {
+            renderQuiz();
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('result').className = "mt-6 text-center text-xl font-semibold";
+        }
+
+        renderQuiz();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>

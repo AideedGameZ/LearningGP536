@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Games Writing Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 to-purple-200 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-2xl">
+        <h2 class="text-3xl font-bold mb-6 text-center text-purple-700">🎯 Games Writing Quiz</h2>
+        
+        <div id="quiz" class="space-y-8">
+            <!-- Questions will be inserted by JS -->
+        </div>
+
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="checkAnswers()" class="bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">✅ Check Answers</button>
+            <button onclick="resetQuiz()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">🔄 Reset</button>
+        </div>
+        <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What does creating game loglines involve?",
+                options: [
+                    "Writing short pitches to sell the game concept.",
+                    "Summarizing the game project in 1-2 sentences.",
+                    "Testing gameplay challenges.",
+                    "Writing dialogue and cues for events."
+                ],
+                answer: "Summarizing the game project in 1-2 sentences."
+            },
+            {
+                question: "Which process focuses on explaining backstory, conflicts, and motivation?",
+                options: [
+                    "Creating Game Lore",
+                    "Writing Dialogue",
+                    "Testing Gameplay",
+                    "Preparing Pitches"
+                ],
+                answer: "Creating Game Lore"
+            },
+            {
+                question: "Which process involves short and clear instructions to guide players?",
+                options: [
+                    "Writing Dialogue",
+                    "Compiling the Game Doc",
+                    "Creating Game Lore",
+                    "Developing the Script"
+                ],
+                answer: "Writing Dialogue"
+            },
+            {
+                question: "What is the Game Design Document (GDD) used for?",
+                options: [
+                    "Testing challenges and balancing gameplay.",
+                    "A blueprint for building the game with all key information.",
+                    "Summarizing the game in a short logline.",
+                    "Writing flowcharts and storyboards."
+                ],
+                answer: "A blueprint for building the game with all key information."
+            },
+            {
+                question: "What is testing gameplay mainly about?",
+                options: [
+                    "Writing short pitches.",
+                    "Summarizing game in 1-2 sentences.",
+                    "Ensuring challenges are balanced.",
+                    "Explaining game backstory."
+                ],
+                answer: "Ensuring challenges are balanced."
+            }
+        ];
+
+        function renderQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.innerHTML = "";
+            questions.forEach((q, idx) => {
+                const optionsHtml = q.options.map(option => `
+                    <label class="block bg-purple-100 hover:bg-purple-200 text-purple-800 p-3 rounded-xl cursor-pointer transition">
+                        <input type="radio" name="q${idx}" value="${option}" class="mr-2">
+                        ${option}
+                    </label>
+                `).join('');
+                quizDiv.innerHTML += `
+                    <div>
+                        <p class="font-semibold mb-3">${idx+1}. ${q.question}</p>
+                        <div class="space-y-2">${optionsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            questions.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                if(selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            const resultDiv = document.getElementById('result');
+            if(score === questions.length) {
+                resultDiv.innerHTML = `🎉 Perfect! You got all ${score}/${questions.length} correct!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-green-600";
+            } else {
+                resultDiv.innerHTML = `✅ You got ${score}/${questions.length} correct. Try again!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-yellow-600";
+            }
+        }
+
+        function resetQuiz() {
+            renderQuiz();
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('result').className = "mt-6 text-center text-xl font-semibold";
+        }
+
+        // Initial render
+        renderQuiz();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>

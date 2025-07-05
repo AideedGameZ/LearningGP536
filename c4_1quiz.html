@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game Engines Fun Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    }
+    .glow {
+      text-shadow: 0 0 5px #22d3ee, 0 0 10px #22d3ee, 0 0 20px #06b6d4, 0 0 30px #0e7490;
+    }
+    /* Custom scrollbar for answer list */
+    .answers-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .answers-list::-webkit-scrollbar-thumb {
+      background-color: #22d3ee;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center p-4 text-white font-sans select-none">
+
+  <div class="max-w-3xl w-full bg-gradient-to-tr from-blue-800 via-blue-900 to-cyan-900 rounded-3xl shadow-2xl p-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-4 text-center glow">🎮 Game Engines Quiz Challenge</h1>
+    <p class="mb-6 text-center text-cyan-200">
+      Test your knowledge about popular game engines based on the intro notes! Choose the correct answers and have fun learning.
+    </p>
+
+    <div id="quiz-container" class="bg-blue-700 bg-opacity-70 rounded-xl p-6 shadow-inner">
+      <div id="question" class="text-xl md:text-2xl font-semibold mb-5"></div>
+      <ul id="answers" class="answers-list space-y-3 max-h-48 overflow-y-auto"></ul>
+    </div>
+
+    <div id="result" class="mt-6 text-center text-lg font-medium hidden"></div>
+
+    <button id="next-btn" class="mt-8 w-full bg-cyan-400 hover:bg-cyan-500 transition-colors rounded-xl py-3 font-bold text-blue-900 shadow-lg disabled:opacity-50" disabled>Next Question</button>
+
+    <button id="restart-btn" class="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 transition-colors rounded-xl py-3 font-bold text-blue-900 shadow-lg hidden">Restart Quiz</button>
+  </div>
+
+  <footer class="mt-12 text-center text-cyan-300 text-sm px-4 max-w-3xl">
+    <p>Quiz based on the <strong>Intro to Game Engines</strong> note. Designed to help you memorize facts while having fun!</p>
+  </footer>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the primary purpose of a game engine?",
+        answers: [
+          { text: "To create game music and sound effects", correct: false },
+          { text: "To simplify development by providing core components like rendering and physics", correct: true },
+          { text: "To host game streaming and multiplayer servers", correct: false },
+          { text: "To design game stories and scripts", correct: false },
+        ],
+        fact: "Game engines simplify the development process by providing core components like rendering, physics, sound, and input handling."
+      },
+      {
+        question: "Which module in a game engine is responsible for handling user input from devices?",
+        answers: [
+          { text: "Graphics module", correct: false },
+          { text: "Sound module", correct: false },
+          { text: "Input handling module", correct: true },
+          { text: "Physics module", correct: false },
+        ],
+        fact: "Common modules include input handling, graphics, sound, physics, and dynamics."
+      },
+      {
+        question: "Which of these is NOT a modern game engine feature?",
+        answers: [
+          { text: "Physics balancing between simulation quality and computing power", correct: false },
+          { text: "Visual asset simplification for lighting and shading", correct: false },
+          { text: "Automatic game story writing", correct: true },
+          { text: "Input cross-platform issue solving", correct: false },
+        ],
+        fact: "Modern game engine features include physics balance, input cross-platform solving, and visual assets simplification."
+      },
+      {
+        question: "Which game engine provides Quixel's tools and Megascans assets?",
+        answers: [
+          { text: "Amazon Lumberyard", correct: false },
+          { text: "Unreal Engine", correct: true },
+          { text: "Unity", correct: false },
+          { text: "CryENGINE", correct: false },
+        ],
+        fact: "Unreal Engine features include Quixel's tools and Megascans assets, known for scalability and rich customization."
+      },
+      {
+        question: "Which engine is focused on VR preview and cloud-powered visual scripting?",
+        answers: [
+          { text: "CryENGINE", correct: false },
+          { text: "Unity", correct: false },
+          { text: "GameMaker: Studio", correct: false },
+          { text: "Amazon Lumberyard", correct: true },
+        ],
+        fact: "Amazon Lumberyard is a 3D engine focused on VR preview, visual scripting, and Twitch integration."
+      },
+      {
+        question: "Which game engine is free to use, but offers memberships starting at $50/month and is known for stunning visuals and VR support?",
+        answers: [
+          { text: "CryENGINE", correct: true },
+          { text: "Unity", correct: false },
+          { text: "Unreal Engine", correct: false },
+          { text: "GameMaker: Studio", correct: false },
+        ],
+        fact: "CryENGINE is free-to-use with source code access and marketplace assets, but memberships from $50/month."
+      },
+      {
+        question: "Which engine is known as a point-and-click game engine that requires no programming knowledge?",
+        answers: [
+          { text: "Unreal Engine", correct: false },
+          { text: "GameMaker: Studio", correct: true },
+          { text: "Unity", correct: false },
+          { text: "Amazon Lumberyard", correct: false },
+        ],
+        fact: "GameMaker: Studio is a point-and-click game engine without programming knowledge required."
+      },
+      {
+        question: "Which of these engines offers free personal use but paid plans from $35/month?",
+        answers: [
+          { text: "Unity", correct: true },
+          { text: "GameMaker: Studio", correct: false },
+          { text: "CryENGINE", correct: false },
+          { text: "Amazon Lumberyard", correct: false },
+        ],
+        fact: "Unity offers a free version for personal use and paid plans starting from $35/month."
+      },
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const resultEl = document.getElementById('result');
+
+    function startQuiz() {
+      currentQ = 0;
+      score = 0;
+      resultEl.classList.add('hidden');
+      restartBtn.classList.add('hidden');
+      nextBtn.disabled = true;
+      nextBtn.textContent = 'Next Question';
+      showQuestion();
+    }
+
+    function showQuestion() {
+      nextBtn.disabled = true;
+      const q = quizData[currentQ];
+      questionEl.textContent = `Q${currentQ + 1}. ${q.question}`;
+      answersEl.innerHTML = '';
+
+      q.answers.forEach((answer, index) => {
+        const li = document.createElement('li');
+        li.classList.add('bg-blue-600', 'rounded-md', 'cursor-pointer', 'py-3', 'px-4', 'transition', 'hover:bg-cyan-500', 'text-white', 'select-none', 'shadow-md');
+        li.setAttribute('tabindex', '0');
+        li.textContent = answer.text;
+        li.dataset.correct = answer.correct;
+        li.addEventListener('click', () => selectAnswer(li));
+        li.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectAnswer(li);
+          }
+        });
+        answersEl.appendChild(li);
+      });
+    }
+
+    function selectAnswer(selectedLi) {
+      if (nextBtn.disabled === false) return; 
+
+      const correct = selectedLi.dataset.correct === "true";
+      if (correct) score++;
+
+      [...answersEl.children].forEach(li => {
+        li.removeEventListener('click', () => selectAnswer(li));
+        const isCorrect = li.dataset.correct === "true";
+        if (isCorrect) {
+          li.classList.add('bg-green-600', 'font-bold', 'cursor-default', 'hover:bg-green-600');
+        } else {
+          li.classList.add('bg-red-600', 'line-through', 'cursor-default', 'hover:bg-red-600', 'opacity-70');
+        }
+        li.style.pointerEvents = 'none';
+      });
+
+      selectedLi.classList.add(correct ? 'ring-4' : 'ring-4', correct ? 'ring-green-400' : 'ring-red-400');
+      showFact(quizData[currentQ].fact);
+      nextBtn.disabled = false;
+
+      if (currentQ === quizData.length - 1) {
+        nextBtn.textContent = 'See Results';
+      }
+    }
+
+    function showFact(factText) {
+      resultEl.textContent = `📚 Fun Fact: ${factText}`;
+      resultEl.classList.remove('hidden');
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentQ++;
+      if (currentQ < quizData.length) {
+        resultEl.classList.add('hidden');
+        showQuestion();
+      } else {
+        showFinalScore();
+      }
+      nextBtn.disabled = true;
+    });
+
+    restartBtn.addEventListener('click', () => {
+      startQuiz();
+    });
+
+    function showFinalScore() {
+      questionEl.textContent = `Your Score: ${score} out of ${quizData.length}`;
+      answersEl.innerHTML = '';
+      resultEl.textContent = score === quizData.length
+        ? "Excellent! You're a true game engine expert!"
+        : score >= quizData.length / 2
+          ? "Good job! Keep learning more about game engines."
+          : "Keep practicing! Game engines are fascinating.";
+
+      nextBtn.classList.add('hidden');
+      restartBtn.classList.remove('hidden');
+      resultEl.classList.remove('hidden');
+    }
+
+    // Start quiz automatically on page load
+    startQuiz();
+  </script>
+  <script src="src/qscript.js"></script>
+</body>
+</html>
+

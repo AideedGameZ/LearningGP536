@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Visual Design Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 to-green-200 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-3xl">
+        <h2 class="text-3xl font-bold mb-6 text-center text-green-700">🎨 Visual Design Quiz</h2>
+        
+        <div id="quiz" class="space-y-8">
+            <!-- Questions generated here -->
+        </div>
+
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="checkAnswers()" class="bg-green-400 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">✅ Check Answers</button>
+            <button onclick="resetQuiz()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold transition shadow">🔄 Reset to Level 1</button>
+        </div>
+        <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is Concept Art mainly used for?",
+                options: [
+                    "Testing gameplay mechanics",
+                    "Visual representation to set tone and capture game feel",
+                    "Creating final 3D models",
+                    "Balancing game challenges"
+                ],
+                answer: "Visual representation to set tone and capture game feel"
+            },
+            {
+                question: "Why is having a Reference for Creators important?",
+                options: [
+                    "To help balance gameplay",
+                    "To ensure visual consistency throughout the project",
+                    "To adjust difficulty for players",
+                    "To animate creatures realistically"
+                ],
+                answer: "To ensure visual consistency throughout the project"
+            },
+            {
+                question: "What is the main goal when Creating Characters?",
+                options: [
+                    "Making characters visually striking for the target audience",
+                    "Testing user interfaces",
+                    "Designing level layouts",
+                    "Planning camera movements"
+                ],
+                answer: "Making characters visually striking for the target audience"
+            },
+            {
+                question: "Creature Design often draws inspiration from:",
+                options: [
+                    "Real animals, using shapes and silhouettes",
+                    "Existing level blueprints",
+                    "In-game dialogue scripts",
+                    "Marketing documents"
+                ],
+                answer: "Real animals, using shapes and silhouettes"
+            },
+            {
+                question: "Environment Design focuses on:",
+                options: [
+                    "Crafting detailed places for characters to interact with",
+                    "Writing quest logs",
+                    "Composing background music",
+                    "Programming AI behaviors"
+                ],
+                answer: "Crafting detailed places for characters to interact with"
+            },
+            {
+                question: "Props & Asset Design deals with:",
+                options: [
+                    "Designing objects that support the scene, like furniture or tools",
+                    "Building main characters",
+                    "Adjusting player controls",
+                    "Testing game scripts"
+                ],
+                answer: "Designing objects that support the scene, like furniture or tools"
+            },
+            {
+                question: "What is the main purpose of a Storyboard?",
+                options: [
+                    "Creating final textures",
+                    "Testing level progression",
+                    "A graphic organizer to pre-visualize gameplay or media sequences",
+                    "Balancing game scoring systems"
+                ],
+                answer: "A graphic organizer to pre-visualize gameplay or media sequences"
+            },
+            {
+                question: "Why are storyboards important in complex games?",
+                options: [
+                    "They identify gaps, provide a visual overview, and give a quick preview before production",
+                    "They balance difficulty",
+                    "They optimize game performance",
+                    "They compose background music"
+                ],
+                answer: "They identify gaps, provide a visual overview, and give a quick preview before production"
+            }
+        ];
+
+        function renderQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.innerHTML = "";
+            questions.forEach((q, idx) => {
+                const optionsHtml = q.options.map(option => `
+                    <label class="block bg-green-100 hover:bg-green-200 text-green-800 p-3 rounded-xl cursor-pointer transition">
+                        <input type="radio" name="q${idx}" value="${option}" class="mr-2">
+                        ${option}
+                    </label>
+                `).join('');
+                quizDiv.innerHTML += `
+                    <div>
+                        <p class="font-semibold mb-3">${idx+1}. ${q.question}</p>
+                        <div class="space-y-2">${optionsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            questions.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                if(selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            const resultDiv = document.getElementById('result');
+            if(score === questions.length) {
+                resultDiv.innerHTML = `🎉 Amazing! You got all ${score}/${questions.length} correct!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-green-600";
+            } else {
+                resultDiv.innerHTML = `✅ You got ${score}/${questions.length} correct. Review and try again!`;
+                resultDiv.className = "mt-6 text-center text-xl font-semibold text-yellow-600";
+            }
+        }
+
+        function resetQuiz() {
+            renderQuiz();
+            document.getElementById('result').innerHTML = "";
+            document.getElementById('result').className = "mt-6 text-center text-xl font-semibold";
+        }
+
+        renderQuiz();
+    </script>
+    <script src="src/qscript.js"></script>
+</body>
+</html>
